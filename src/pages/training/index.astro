@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const plans = [
+  {
+    title: '健身房三分化',
+    href: '/training/gym-3',
+    desc: '背+二头 / 胸+三头 / 腿臀+腹，新手推荐',
+    tags: ['健身房', '3天/周'],
+  },
+  {
+    title: '四分化（肩单练）',
+    href: '/training/gym-4-shoulder',
+    desc: '背+二头 / 胸+三头 / 腿臀 / 肩（独立日）',
+    tags: ['健身房', '4天/周'],
+  },
+  {
+    title: '四分化（手臂单练）',
+    href: '/training/gym-4-arms',
+    desc: '背+后肩 / 胸+前中肩 / 腿臀 / 手臂+腹',
+    tags: ['健身房', '4天/周'],
+  },
+  {
+    title: '居家三分化',
+    href: '/training/home',
+    desc: '弹力带/哑铃方案，三档设备预算',
+    tags: ['居家', '3天/周'],
+  },
+];
+---
+
+<Base title="训练计划 — 松松健身">
+  <div class="container py-10">
+    <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
+      <a href="/" class="hover:text-fg-secondary">首页</a>
+      <span>/</span>
+      <span class="text-fg-secondary">训练</span>
+    </nav>
+
+    <h1 class="heading-1 mb-2">训练计划</h1>
+    <p class="muted-text mb-8">
+      选一个适合你的分化方案。多关节动作 8-12 次至力竭，组间休息 2-3 分钟。
+    </p>
+
+    <div class="space-y-3">
+      {plans.map(({ title, href, desc, tags }) => (
+        <a href={href} class="card flex items-start gap-4 block">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-sm font-medium text-fg">{title}</span>
+              {tags.map((t) => (
+                <span class="tag-pill bg-tag-blue text-blue-800">{t}</span>
+              ))}
+            </div>
+            <div class="text-xs text-fg-tertiary mt-1">{desc}</div>
+          </div>
+          <svg class="w-4 h-4 text-fg-tertiary mt-0.5 flex-none" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 4l4 4-4 4" />
+          </svg>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-10">
+      <h2 class="heading-2 mb-4">通用原则</h2>
+      <div class="space-y-3 text-sm text-fg-secondary leading-relaxed">
+        <p><strong>频率：</strong>3 天/周足够，4-5 天饱和，6 天没必要。</p>
+        <p><strong>重量：</strong>8-12 次至力竭是增肌最佳区间（5-30 次都有效）。</p>
+        <p><strong>休息：</strong>多关节动作 2-3 分钟，单关节动作 1-1.5 分钟。</p>
+        <p><strong>时长：</strong>每次 1-1.5 小时。</p>
+        <p><strong>至力竭：</strong>不是必须的。危险动作（深蹲、卧推、过顶推举）不要去力竭。</p>
+        <p><strong>女性调整：</strong>胸部训练隔次跳过，重量偏轻 10-15 次，强调臀部。</p>
+      </div>
+    </div>
+
+    <div class="mt-8 callout-tip">
+      <strong>配套视频：</strong>
+      <a href="https://www.bilibili.com/video/BV1Hk4y187jF" target="_blank" class="underline decoration-dotted">
+        健身新手的完全训练手册（BV1Hk4y187jF）
+      </a>
+    </div>
+  </div>
+</Base>

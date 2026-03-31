@@ -1,0 +1,85 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '好人松松的饮食方法——用配额吃饭，而不是算热量。' } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const nav = [
+  { href: '/learn/philosophy', label: '理解体系' },
+  { href: '/food', label: '食物' },
+  { href: '/training', label: '训练' },
+  { href: '/qa', label: '常见问题' },
+  { href: '/about', label: '关于' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-bg text-fg min-h-screen">
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200/60">
+      <div class="container-wide flex items-center justify-between h-12">
+        <a href="/" class="font-semibold text-fg tracking-tight text-sm">
+          松松健身
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          {nav.map(({ href, label }) => (
+            <a
+              href={href}
+              class:list={[
+                'nav-link',
+                currentPath.startsWith(href) && 'text-fg! font-medium',
+              ]}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <button id="menu-toggle" class="md:hidden p-1 text-fg-secondary" aria-label="菜单">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 5h14M3 10h14M3 15h14" />
+          </svg>
+        </button>
+      </div>
+      <nav id="mobile-menu" class="md:hidden hidden border-t border-gray-200/60 bg-white pb-3">
+        {nav.map(({ href, label }) => (
+          <a
+            href={href}
+            class:list={[
+              'block px-6 py-2 text-sm',
+              currentPath.startsWith(href) ? 'text-fg font-medium' : 'text-fg-secondary',
+            ]}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-200/60 mt-20">
+      <div class="container py-8 text-fg-tertiary text-xs flex flex-col sm:flex-row justify-between gap-2">
+        <p>内容基于 <a href="https://space.bilibili.com/39319021" target="_blank" class="underline decoration-dotted hover:text-fg-secondary">B站@好人松松</a> 的健身 Excel 套表</p>
+        <p>本站开源 · 不提供医疗建议</p>
+      </div>
+    </footer>
+
+    <script is:inline>
+      document.getElementById('menu-toggle')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu')?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>

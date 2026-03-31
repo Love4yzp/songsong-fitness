@@ -1,0 +1,88 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+
+<Article
+  title="增肌须知"
+  description="增肌的目标、速度、退出点和与减脂的区别"
+  breadcrumb={[{ label: '理解体系', href: '/learn/philosophy' }]}
+>
+  <h2>目标</h2>
+
+  <p>增肌期体重会涨，但要控制涨速。肌肉合成速度远慢于脂肪分解——平均每天能合成 10g 肌肉已经很高效了。</p>
+
+  <div class="callout-tip">
+    <strong>建议退出点（转减脂）：</strong><br />
+    介意发胖：男性 BMI 23-24，女性 BMI 21-22<br />
+    不太介意：男性 BMI 24-25，女性 BMI 22-23<br />
+    一般不建议增到更高。
+  </div>
+
+  <h2>速度</h2>
+
+  <p>男性每月增重 <strong>≤1kg</strong>，女性每月 <strong>≤0.5kg</strong>。如果增速超过这个数，多出来的基本都是脂肪。</p>
+
+  <p>增肌体重不要严格要求上涨，只要有上行趋势即可。看 <strong>1 个月</strong> 的趋势，不看每天。</p>
+
+  <h2>热量系数</h2>
+
+  <p>增肌的应吃热量 = 平衡热量 × <strong>0.84</strong>。</p>
+
+  <p>来历：干净增肌盈余 5%（×1.05）+ 留余地（×0.8）= 0.84。和减脂一样，留余地是因为实际摄入总是比计算高。</p>
+
+  <h2>宏量素</h2>
+
+  <table>
+    <thead><tr><th>参数</th><th>数值</th></tr></thead>
+    <tbody>
+      <tr><td>碳水配额</td><td>由视频指导（约 4-5 g/kg）</td></tr>
+      <tr><td>蛋白配额</td><td>由视频指导（约 2 g/kg）</td></tr>
+      <tr><td>脂肪</td><td>男 80g / 女 70g，不细算</td></tr>
+      <tr><td>如果算热量的分配</td><td>扣脂肪后 70% 碳水 / 30% 蛋白</td></tr>
+    </tbody>
+  </table>
+
+  <h2>力训</h2>
+
+  <p>增肌<strong>必须有稳定力训 3-5 次/周</strong>。没有力训的增肌只是长胖。</p>
+
+  <h2>有氧</h2>
+
+  <p><strong>不做有氧。</strong>增肌期热量盈余本就不大，有氧会削减盈余。</p>
+
+  <h2>体重不长怎么调</h2>
+
+  <p>一个月完全不长，才考虑加热量：</p>
+  <ul>
+    <li>每天加碳水 30-60g（≈米饭 100-200g）</li>
+    <li>或加脂肪 10-20g（≈坚果 30g 或全脂牛奶 2 盒）</li>
+  </ul>
+
+  <h2>与减脂的系统性差异</h2>
+
+  <table>
+    <thead><tr><th>维度</th><th>减脂</th><th>增肌</th></tr></thead>
+    <tbody>
+      <tr><td>热量系数</td><td>×0.64</td><td>×0.84</td></tr>
+      <tr><td>脂肪配额</td><td>男 60g / 女 50g</td><td>男 80g / 女 70g</td></tr>
+      <tr><td>脂肪推荐</td><td>蛋黄牛奶 + 带油菜</td><td>同左 + 30g 坚果</td></tr>
+      <tr><td>力训</td><td>有助保肌，非必须</td><td>必须 3-5 次/周</td></tr>
+      <tr><td>有氧</td><td>按体重定</td><td>不做</td></tr>
+      <tr><td>监控周期</td><td>2 周</td><td>1 个月</td></tr>
+      <tr><td>精确度</td><td>较高</td><td>较低（容错更高）</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8 border-gray-200" />
+
+  <div class="grid sm:grid-cols-2 gap-4 not-prose">
+    <a href="/learn/cutting" class="card block">
+      <div class="text-sm font-medium">← 减脂须知</div>
+      <div class="text-xs text-fg-tertiary mt-1">目标、速度、退出点、有氧建议</div>
+    </a>
+    <a href="/training" class="card block">
+      <div class="text-sm font-medium">训练计划 →</div>
+      <div class="text-xs text-fg-tertiary mt-1">三分化、四分化、居家方案</div>
+    </a>
+  </div>
+</Article>

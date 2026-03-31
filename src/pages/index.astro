@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="松松健身 — 用配额吃饭，不算卡路里">
+  <!-- Hero -->
+  <section class="container py-16 md:py-24">
+    <h1 class="text-3xl md:text-5xl font-bold text-fg tracking-tight leading-tight max-w-2xl">
+      管住嘴，<br />不用数卡路里。
+    </h1>
+    <p class="mt-4 text-lg text-fg-secondary max-w-xl leading-relaxed">
+      好人松松的饮食方法——用配额吃饭，而不是算热量。搞清楚碳水和蛋白质吃多少克，脂肪不用算。
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/learn/philosophy" class="inline-flex items-center gap-1.5 px-4 py-2 bg-fg text-white rounded-md text-sm font-medium hover:bg-fg/90 transition-colors">
+        开始了解
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4" /></svg>
+      </a>
+      <a href="/food" class="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 rounded-md text-sm text-fg-secondary hover:text-fg hover:border-gray-400 transition-colors">
+        查食物
+      </a>
+    </div>
+  </section>
+
+  <!-- Three pillars -->
+  <section class="container pb-16">
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card">
+        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念一</div>
+        <h3 class="heading-3 mb-2">只管碳水和蛋白质</h3>
+        <p class="text-sm text-fg-secondary leading-relaxed">
+          脂肪不用算。早饭吃蛋黄牛奶，正餐吃带油瘦肉炒菜，脂肪就够了。比数卡路里简单十倍。
+        </p>
+      </div>
+      <div class="card">
+        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念二</div>
+        <h3 class="heading-3 mb-2">记住不能吃什么</h3>
+        <p class="text-sm text-fg-secondary leading-relaxed">
+          不列"能吃"清单，只定义"不能吃"：高脂肉和糖油混合物。剩下的，随便吃。
+        </p>
+      </div>
+      <div class="card">
+        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念三</div>
+        <h3 class="heading-3 mb-2">秤只用一周</h3>
+        <p class="text-sm text-fg-secondary leading-relaxed">
+          初期用食物秤建立直觉，之后就不用了。体重看两周趋势，不看每天。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's here -->
+  <section class="container pb-16">
+    <h2 class="heading-2 mb-6">这个网站有什么</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <a href="/learn/philosophy" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">📖</span>
+        <div>
+          <div class="text-sm font-medium text-fg group-hover:underline">理解体系</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">为什么有效、怎么运作、减脂与增肌的区别</div>
+        </div>
+      </a>
+      <a href="/food" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">🥦</span>
+        <div>
+          <div class="text-sm font-medium text-fg group-hover:underline">食物数据库</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">113 种食物的营养率，搜索、换算、排除清单</div>
+        </div>
+      </a>
+      <a href="/training" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">🏋️</span>
+        <div>
+          <div class="text-sm font-medium text-fg group-hover:underline">训练计划</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">三分化、四分化、居家方案、力量预测</div>
+        </div>
+      </a>
+      <a href="/qa" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">💬</span>
+        <div>
+          <div class="text-sm font-medium text-fg group-hover:underline">常见问题</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">体重不动、外面怎么吃、觉得饿……按症状找答案</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-bg-secondary border-y border-gray-200/60">
+    <div class="container py-12 text-center">
+      <p class="text-sm text-fg-secondary mb-1">内容来自</p>
+      <p class="font-semibold text-fg">B站@好人松松 的健身 Excel 超级套表</p>
+      <p class="text-sm text-fg-secondary mt-2">
+        配套视频：<a href="https://www.bilibili.com/video/BV1zu4m1N76R" target="_blank" class="underline decoration-dotted hover:text-fg">BV1zu4m1N76R</a>
+      </p>
+    </div>
+  </section>
+</Base>

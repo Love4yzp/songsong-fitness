@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import FoodBrowser from '../../components/FoodBrowser.vue';
+---
+
+<Base title="食物数据库 — 松松健身">
+  <div class="container py-10">
+    <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
+      <a href="/" class="hover:text-fg-secondary">首页</a>
+      <span>/</span>
+      <span class="text-fg-secondary">食物</span>
+    </nav>
+
+    <h1 class="heading-1 mb-2">食物数据库</h1>
+    <p class="muted-text mb-8">
+      113 种日常食物的营养率。输入你需要的宏量素克数，自动算出食物重量。
+    </p>
+
+    <FoodBrowser client:load />
+
+    <div class="mt-10 space-y-4">
+      <h2 class="heading-2">不能吃什么</h2>
+
+      <div class="callout-important">
+        <h3 class="text-sm font-semibold mb-1">高脂肉（脂肪率 ≥10%）</h3>
+        <p class="text-sm">鸡鸭皮、大排、糖醋里脊、锅包肉、鸡翅、猪蹄、牛腩、牛排、排骨、烤肉、炸肉、午餐肉、肥牛、肥羊、肉肠、肉饼、肉馅、肉丸</p>
+      </div>
+
+      <div class="callout-warn">
+        <h3 class="text-sm font-semibold mb-1">糖油混合物（碳水 30-50%，脂肪 20-40%）</h3>
+        <p class="text-sm">饼干、蛋糕、点心、糕点、甜品、油条、煎饼、花式面包、膨化食品。200g 就能吃完全天脂肪配额。</p>
+      </div>
+
+      <div class="callout">
+        <h3 class="text-sm font-semibold mb-1">容易踩坑的</h3>
+        <ul class="text-sm space-y-1 mt-2">
+          <li><strong>炒鸡蛋：</strong>一个鸡蛋加吸油量脂肪 ≥20g，花掉半天脂肪配额</li>
+          <li><strong>面条/米线/卷饼：</strong>饱腹感极低，一份碳水 80-160g</li>
+          <li><strong>水果：</strong>实质是糖水，要计入碳水配额置换主食（10g 水果碳水 = 少吃 30g 米饭）</li>
+          <li><strong>肉馅水饺：</strong>碳水 + 五花肉，脂肪比纯主食高得多</li>
+          <li><strong>肉包子：</strong>换成馒头或素包子</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const pages = [
+  { href: '/learn/philosophy', title: '为什么有效', desc: '四条核心理念：配额>卡路里、排除法>清单法、秤只用一周、脂肪不用算' },
+  { href: '/learn/how-it-works', title: '怎么运作', desc: '配额→食物两层模型，宏量素配额，每餐分配' },
+  { href: '/learn/cutting', title: '减脂须知', desc: '目标 BMI、速度、0.64 系数、有氧建议、调整方法' },
+  { href: '/learn/bulking', title: '增肌须知', desc: '目标 BMI、速度、0.84 系数、与减脂的系统性差异' },
+];
+---
+
+<Base title="理解体系 — 松松健身">
+  <div class="container py-10">
+    <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
+      <a href="/" class="hover:text-fg-secondary">首页</a>
+      <span>/</span>
+      <span class="text-fg-secondary">理解体系</span>
+    </nav>
+
+    <h1 class="heading-1 mb-2">理解体系</h1>
+    <p class="muted-text mb-8">先搞懂为什么，再看怎么做。</p>
+
+    <div class="space-y-3">
+      {pages.map(({ href, title, desc }) => (
+        <a href={href} class="card flex items-start gap-4 block">
+          <div class="flex-1">
+            <div class="text-sm font-medium text-fg">{title}</div>
+            <div class="text-xs text-fg-tertiary mt-1">{desc}</div>
+          </div>
+          <svg class="w-4 h-4 text-fg-tertiary mt-0.5 flex-none" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 4l4 4-4 4" />
+          </svg>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>
