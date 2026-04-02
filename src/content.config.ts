@@ -1,7 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const learn = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/learn' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -16,7 +17,7 @@ const learn = defineCollection({
 });
 
 const qa = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/qa' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -31,7 +32,7 @@ const qa = defineCollection({
 });
 
 const training = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/training' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -47,19 +48,4 @@ const training = defineCollection({
   }),
 });
 
-const food = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    category: z.enum(['protein', 'carb', 'fat', 'vegetable', 'fruit', 'other']),
-    nutritionRate: z.number(),
-    tags: z.array(z.string()).default([]),
-    publishedAt: z.coerce.date(),
-    updatedAt: z.coerce.date().optional(),
-    draft: z.boolean().default(false),
-    aliases: z.array(z.string()).default([]),
-  }),
-});
-
-export const collections = { learn, qa, training, food };
+export const collections = { learn, qa, training };

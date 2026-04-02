@@ -4,7 +4,7 @@ description: 好人松松饮食体系的四条核心理念
 category: philosophy
 tags: [减脂, 增肌, 核心理念]
 publishedAt: 2024-01-15
-draft: true
+draft: false
 order: 1
 ---
 

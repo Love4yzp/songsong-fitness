@@ -94,8 +94,8 @@ bun run build
 
 特别感谢 **B站@好人松松** 提供的健身知识体系与 Excel 工具支持。
 
-- [好人松松的 B站主页](https://space.bilibili.com/179739)
-- [好人松松的健身超级套表](https://www.bilibili.com/video/BV1uJ411m7vJ)
+- [好人松松的 B站主页](https://space.bilibili.com/2078781964)
+- [好人松松的健身超级套表（百度网盘）](https://pan.baidu.com/s/1iY73CTNleiiB0wGa0uh8jA?pwd=5s62)
 
 ---
 *声明：本站仅作为知识分享，不提供医疗建议。开始任何健身计划前请咨询专业人士。*
