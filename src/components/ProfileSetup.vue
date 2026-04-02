@@ -6,6 +6,7 @@ import { calculateBMR, calculateTDEE, calculateMacros, calculateCalorieDelta, es
 import type { DayType } from '../logic/calculator';
 import { computed } from 'vue';
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const profile = useStore($profile);
 const isTraining = useStore($isTrainingDay);
 
@@ -159,7 +160,7 @@ const goalScenarios = computed(() => ({
     </div>
 
     <!-- CTA -->
-    <a href="/plan" class="btn-primary w-full text-center no-underline block py-3">
+    <a :href="`${base}/plan`" class="btn-primary w-full text-center no-underline block py-3">
       查看今日饮食方案 →
     </a>
   </div>

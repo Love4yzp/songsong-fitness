@@ -1,42 +1,43 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { url } from '../../utils/url';
 
 const topics = [
   {
     title: '体重不动了',
-    href: '/qa/stall',
+    href: url('/qa/stall'),
     desc: '执行了两周体重不掉（减脂）/ 一个月不长（增肌）',
     tag: '最常见',
     tagColor: 'bg-tag-red text-red-800',
   },
   {
     title: '在外面怎么吃',
-    href: '/qa/eating-out',
+    href: url('/qa/eating-out'),
     desc: '食堂、外卖、餐馆、聚餐的实操指南',
   },
   {
     title: '觉得饿',
-    href: '/qa/hunger',
+    href: url('/qa/hunger'),
     desc: '高饱腹感食物选择 + 有氧置换饮食的安全阀',
   },
   {
     title: '喝酒',
-    href: '/qa/alcohol',
+    href: url('/qa/alcohol'),
     desc: '1 两白酒 = 1 瓶啤酒 = 200 大卡 = 50g 碳水',
   },
   {
     title: '特殊体质',
-    href: '/qa/medical',
+    href: url('/qa/medical'),
     desc: '高尿酸/痛风、胰岛素抵抗/二型糖尿病的配额调整',
   },
   {
     title: '常见误区',
-    href: '/qa/myths',
+    href: url('/qa/myths'),
     desc: '体脂秤不可信、每天体重无意义、别追求同时增肌减脂…',
   },
   {
     title: '实操细节',
-    href: '/qa/practical',
+    href: url('/qa/practical'),
     desc: '称重方法、固定重量食物、便携碳水、力训时间切换',
   },
 ];
@@ -45,7 +46,7 @@ const topics = [
 <Base title="常见问题 — 松松健身">
   <div class="container py-10">
     <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
-      <a href="/" class="hover:text-fg-secondary">首页</a>
+      <a href={url('/')} class="hover:text-fg-secondary">首页</a>
       <span>/</span>
       <span class="text-fg-secondary">常见问题</span>
     </nav>

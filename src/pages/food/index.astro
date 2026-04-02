@@ -1,12 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import FoodBrowser from '../../components/FoodBrowser.vue';
+import { url } from '../../utils/url';
 ---
 
 <Base title="食物数据库 — 松松健身">
   <div class="container py-10">
     <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
-      <a href="/" class="hover:text-fg-secondary">首页</a>
+      <a href={url('/')} class="hover:text-fg-secondary">首页</a>
       <span>/</span>
       <span class="text-fg-secondary">食物</span>
     </nav>

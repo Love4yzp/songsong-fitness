@@ -1,4 +1,6 @@
 ---
+import { url } from '../utils/url';
+
 interface Props {
   title: string;
   description?: string;
@@ -7,8 +9,8 @@ interface Props {
   noindex?: boolean;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = '好人松松的饮食方法——用配额吃饭，而不是算热量。',
   image = '/og-image.png',
   type = 'website',
@@ -20,16 +22,16 @@ const canonicalURL = new URL(currentPath, siteURL);
 const ogImageURL = new URL(image, siteURL);
 
 const primaryNav = [
-  { href: '/calculator', label: '计算器' },
-  { href: '/plan', label: '方案' },
-  { href: '/food', label: '食物' },
+  { href: url('/calculator'), label: '计算器' },
+  { href: url('/plan'), label: '方案' },
+  { href: url('/food'), label: '食物' },
 ];
 
 const moreNav = [
-  { href: '/learn/philosophy', label: '理解体系' },
-  { href: '/training', label: '训练' },
-  { href: '/qa', label: '常见问题' },
-  { href: '/about', label: '关于' },
+  { href: url('/learn/philosophy'), label: '理解体系' },
+  { href: url('/training'), label: '训练' },
+  { href: url('/qa'), label: '常见问题' },
+  { href: url('/about'), label: '关于' },
 ];
 ---
 
@@ -47,8 +49,8 @@ const moreNav = [
     <link rel="canonical" href={canonicalURL} />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -97,7 +99,7 @@ const moreNav = [
   <body class="bg-bg dark:bg-gray-900 text-fg dark:text-gray-100 min-h-screen transition-colors duration-200">
     <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200/60 dark:border-gray-700/60 transition-colors duration-200">
       <div class="container-wide flex items-center justify-between h-12">
-        <a href="/" class="font-semibold text-fg dark:text-gray-100 tracking-tight text-sm">
+        <a href={url('/')} class="font-semibold text-fg dark:text-gray-100 tracking-tight text-sm">
           松松健身
         </a>
         <nav class="hidden md:flex items-center gap-6">
