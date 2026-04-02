@@ -1,161 +1,190 @@
 <script setup lang="ts">
-import { useStore } from '@nanostores/vue';
-import { $profile, $isTrainingDay } from '../stores/profile';
-import { scenarios } from '../data/scenarios';
-import { foods, calcFoodWeight, getFoodsByMacro, FOOD_IDS } from '../data/foods';
-import type { Food } from '../data/foods';
-import { calculateBMR, calculateMacros, distributeMeals } from '../logic/calculator';
-import type { DayType } from '../logic/calculator';
 import { computed, ref } from 'vue';
+import { useStore } from '@nanostores/vue';
+import { $profile, updateProfile, $isTrainingDay } from '../stores/profile';
+import { scenarios } from '../data/scenarios';
+import type { DayType } from '../logic/calculator';
+import { calculateBMR, calculateTDEE, calculateMacros } from '../logic/calculator';
+import { foods, getFoodsByMacro, calcFoodWeight, FOOD_IDS } from '../data/foods';
 import FoodPicker from './FoodPicker.vue';
 
 const profile = useStore($profile);
-const isTraining = useStore($isTrainingDay);
+const isTrainingDay = useStore($isTrainingDay);
 
-const scenario = computed(() =>
-  scenarios.find(s => s.id === profile.value.scenarioId) || scenarios[2]
+const currentScenario = computed(() =>
+  scenarios.find(s => s.id === profile.value.scenarioId) || scenarios[0]
 );
 
-const dayType = computed<DayType>(() =>
-  isTraining.value && scenario.value.hasWeightTraining ? 'training' : 'rest'
+// ── 吸顶控制台数据 ──
+const goalScenarios = computed(() => ({
+  cutting: scenarios.filter(s => s.goal === 'cutting'),
+  bulking: scenarios.filter(s => s.goal === 'bulking'),
+}));
+
+const dayType = computed<DayType>(() => isTrainingDay.value ? 'training' : 'rest');
+
+const dailyMacros = computed(() =>
+  calculateMacros(profile.value, currentScenario.value, dayType.value)
 );
 
-const macros = computed(() =>
-  calculateMacros(profile.value, scenario.value, dayType.value)
-);
+const currentMeals = computed(() => {
+  const s = currentScenario.value;
+  const p = profile.value;
+  const isTraining = isTrainingDay.value;
 
-const meals = computed(() =>
-  distributeMeals(macros.value, scenario.value, dayType.value)
-);
+  const baseMeals = isTraining ? s.trainingDayMeals : s.restDayMeals;
+  const carbTotal = p.weight * (isTraining ? s.carbQuota.training : s.carbQuota.rest);
+  const proteinTotal = p.weight * (isTraining ? s.proteinQuota.training : s.proteinQuota.rest);
 
-// ─── 食物选择 state ───
-interface MealFoods {
-  carb: Food;
-  protein: Food;
+  return baseMeals.map(m => ({
+    ...m,
+    carbs: Math.round(carbTotal * m.carbRatio),
+    protein: Math.round(proteinTotal * m.proteinRatio),
+  }));
+});
+
+// Track food overrides per meal index + macro type
+const carbFoodOverrides = ref<Record<number, string>>({});
+const proteinFoodOverrides = ref<Record<number, string>>({});
+
+const pickerState = ref<{ open: boolean; mealIndex: number; macro: 'carb' | 'protein' }>({
+  open: false, mealIndex: -1, macro: 'carb',
+});
+
+function openPicker(index: number, macro: 'carb' | 'protein') {
+  pickerState.value = { open: true, mealIndex: index, macro };
 }
 
-// 使用命名常量而非硬编码 ID
-const defaultCarb = foods.find(f => f.id === FOOD_IDS.RICE_COOKED_NORMAL) ?? foods[0];
-const defaultProtein = foods.find(f => f.id === FOOD_IDS.CHICKEN_BREAST) ?? foods.find(f => f.macro === 'protein')!;
-
-const mealFoodSelections = ref<Map<number, MealFoods>>(new Map());
-
-function getMealFoods(index: number): MealFoods {
-  return mealFoodSelections.value.get(index) || { carb: defaultCarb, protein: defaultProtein };
-}
-
-function setMealFood(mealIndex: number, macro: 'carb' | 'protein', food: Food) {
-  const current = getMealFoods(mealIndex);
-  const updated = { ...current, [macro]: food };
-  const newMap = new Map(mealFoodSelections.value);
-  newMap.set(mealIndex, updated);
-  mealFoodSelections.value = newMap;
-}
-
-// ─── 食物选择弹窗 ───
-const showPicker = ref(false);
-const pickerMealIndex = ref(0);
-const pickerMacro = ref<'carb' | 'protein'>('carb');
-
-function openPicker(mealIndex: number, macro: 'carb' | 'protein') {
-  pickerMealIndex.value = mealIndex;
-  pickerMacro.value = macro;
-  showPicker.value = true;
-}
-
-function selectFood(food: Food) {
-  setMealFood(pickerMealIndex.value, pickerMacro.value, food);
-  showPicker.value = false;
-}
-
-function roleBadgeClass(role: string) {
-  switch (role) {
-    case 'pre-workout': return 'badge-pre';
-    case 'post-workout': return 'badge-post';
-    case 'snack': return 'badge-snack';
-    default: return '';
+function onFoodSelect(food: import('../data/foods').Food) {
+  const { mealIndex, macro } = pickerState.value;
+  if (macro === 'carb') {
+    carbFoodOverrides.value[mealIndex] = food.id;
+  } else {
+    proteinFoodOverrides.value[mealIndex] = food.id;
   }
+  pickerState.value.open = false;
 }
 
-function roleBadgeText(role: string) {
-  switch (role) {
-    case 'pre-workout': return '练前';
-    case 'post-workout': return '练后';
-    case 'snack': return '加餐';
-    default: return '';
-  }
+function getCarbFood(index: number) {
+  const id = carbFoodOverrides.value[index] || FOOD_IDS.RICE_COOKED_NORMAL;
+  return foods.find(f => f.id === id) || foods[0];
 }
+
+function getProteinFood(index: number) {
+  const id = proteinFoodOverrides.value[index] || FOOD_IDS.CHICKEN_BREAST;
+  return foods.find(f => f.id === id) || foods.find(f => f.macro === 'protein') || foods[0];
+}
+
+const roleColors: Record<string, string> = {
+  'pre-workout': 'text-role-pre bg-role-pre/10 border-role-pre/20',
+  'post-workout': 'text-role-post bg-role-post/10 border-role-post/20',
+  'normal': 'text-fg-secondary bg-bg-tertiary/30 border-border',
+  'snack': 'text-role-snack bg-role-snack/10 border-role-snack/20',
+};
+
+const roleLabels: Record<string, string> = {
+  'pre-workout': '练前餐',
+  'post-workout': '练后餐',
+  'normal': '正餐',
+  'snack': '加餐',
+};
 </script>
 
 <template>
   <div>
-    <!-- Header -->
-    <div class="mb-5">
-      <div class="flex items-center gap-2">
-        <h2 class="heading-3">{{ scenario.timing }}</h2>
-        <span :class="scenario.goal === 'cutting' ? 'badge-cutting' : 'badge-bulking'">
-          {{ scenario.goal === 'cutting' ? '减脂' : '增肌' }}
+    <!-- ── 吸顶控制台 ── -->
+    <div class="sticky top-0 z-40 bg-bg/95 backdrop-blur-sm border-b border-border -mx-4 px-4 pt-3 pb-2 mb-4">
+      <div class="flex gap-2 items-stretch">
+        <!-- 日类型切换 -->
+        <div
+          v-if="currentScenario.hasWeightTraining"
+          class="flex-none flex items-center rounded-lg px-3 py-1.5 cursor-pointer select-none transition-colors"
+          :class="isTrainingDay ? 'bg-role-post/15 text-role-post' : 'bg-bg-tertiary text-fg-secondary'"
+          @click="$isTrainingDay.set(!isTrainingDay)"
+        >
+          <span class="text-xs font-black">{{ isTrainingDay ? '力训日' : '休息日' }}</span>
+        </div>
+
+        <!-- 场景选择 -->
+        <select
+          class="flex-1 min-w-0 text-xs font-bold bg-bg-secondary border border-border rounded-lg px-2 py-1.5 text-fg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-accent"
+          :value="profile.scenarioId"
+          @change="updateProfile({ scenarioId: +($event.target as HTMLSelectElement).value })"
+        >
+          <optgroup label="减脂">
+            <option v-for="s in goalScenarios.cutting" :key="s.id" :value="s.id">{{ s.timing }}</option>
+          </optgroup>
+          <optgroup label="增肌">
+            <option v-for="s in goalScenarios.bulking" :key="s.id" :value="s.id">{{ s.timing }}</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- 全天配额摘要 -->
+      <div class="mt-2 flex items-center justify-center gap-3 text-[10px] font-mono font-bold text-fg-tertiary">
+        <span>C <span class="text-macro-carb">{{ dailyMacros.carbs }}g</span></span>
+        <span>P <span class="text-macro-protein">{{ dailyMacros.protein }}g</span></span>
+        <span>F <span class="text-macro-fat">{{ dailyMacros.fat }}g</span></span>
+        <span class="text-fg-secondary">{{ dailyMacros.calories }} kcal</span>
+      </div>
+    </div>
+
+    <!-- ── 餐单列表 ── -->
+    <div class="space-y-4">
+    <div v-for="(meal, index) in currentMeals" :key="index" class="card !p-0 overflow-hidden">
+      <!-- Meal header -->
+      <div class="px-5 py-3 flex items-center justify-between border-b border-border-light bg-bg-tertiary/20">
+        <div class="flex items-center gap-2.5">
+          <span
+            :class="roleColors[meal.role]"
+            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border"
+          >{{ roleLabels[meal.role] }}</span>
+          <span class="text-xs font-bold text-fg-strong">{{ meal.name }}</span>
+        </div>
+        <div class="text-[10px] font-bold text-fg-tertiary">
+          C {{ meal.carbs }}g / P {{ meal.protein }}g
+        </div>
+      </div>
+
+      <!-- Carb food -->
+      <div v-if="meal.carbs > 0" class="px-5 py-3 flex items-center justify-between border-b border-border-light">
+        <button class="flex items-center gap-2 group" @click="openPicker(index, 'carb')">
+          <span class="text-sm font-bold text-fg group-hover:text-accent transition-colors">
+            {{ getCarbFood(index).name }}
+          </span>
+          <svg class="w-3 h-3 text-fg-tertiary" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5l3 3 3-3"/></svg>
+        </button>
+        <span class="text-sm font-bold text-macro-carb font-mono">
+          {{ calcFoodWeight(meal.carbs, getCarbFood(index).rate) }}g
         </span>
       </div>
-      <p class="muted-text mt-1">
-        {{ dayType === 'training' ? '力训日' : '休息日' }} ·
-        {{ macros.calories }} kcal ·
-        碳{{ macros.carbs }}g / 蛋{{ macros.protein }}g / 脂{{ macros.fat }}g
-      </p>
-    </div>
 
-    <!-- 各餐卡片 — 并列 grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div
-        v-for="(meal, i) in meals"
-        :key="i"
-        class="tool-card flex flex-col"
-      >
-        <!-- 餐次头部 -->
-        <div class="flex justify-between items-center mb-3">
-          <span class="text-sm font-bold text-fg">{{ meal.name }}</span>
-          <span v-if="roleBadgeText(meal.role)" :class="roleBadgeClass(meal.role)">
-            {{ roleBadgeText(meal.role) }}
+      <!-- Protein food -->
+      <div v-if="meal.protein > 0" class="px-5 py-3 flex items-center justify-between">
+        <button class="flex items-center gap-2 group" @click="openPicker(index, 'protein')">
+          <span class="text-sm font-bold text-fg group-hover:text-accent transition-colors">
+            {{ getProteinFood(index).name }}
           </span>
-        </div>
+          <svg class="w-3 h-3 text-fg-tertiary" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5l3 3 3-3"/></svg>
+        </button>
+        <span class="text-sm font-bold text-macro-protein font-mono">
+          {{ calcFoodWeight(meal.protein, getProteinFood(index).rate) }}g
+        </span>
+      </div>
 
-        <!-- 碳水食物 -->
-        <div v-if="meal.carbs > 0" class="food-row mb-1.5" @click="openPicker(i, 'carb')">
-          <div class="min-w-0">
-            <span class="text-sm font-medium text-fg truncate block">{{ getMealFoods(i).carb.name }}</span>
-            <span class="text-xs text-fg-tertiary">{{ meal.carbs }}g 碳水</span>
-          </div>
-          <span class="text-base font-bold text-fg whitespace-nowrap ml-2">{{ calcFoodWeight(meal.carbs, getMealFoods(i).carb.rate) }}g</span>
-        </div>
-
-        <!-- 蛋白质食物 -->
-        <div v-if="meal.protein > 0" class="food-row mb-1.5" @click="openPicker(i, 'protein')">
-          <div class="min-w-0">
-            <span class="text-sm font-medium text-fg truncate block">{{ getMealFoods(i).protein.name }}</span>
-            <span class="text-xs text-fg-tertiary">{{ meal.protein }}g 蛋白</span>
-          </div>
-          <span class="text-base font-bold text-fg whitespace-nowrap ml-2">{{ calcFoodWeight(meal.protein, getMealFoods(i).protein.rate) }}g</span>
-        </div>
-
-        <!-- 撑满空间 + 脂肪提示 -->
-        <div class="mt-auto pt-2">
-          <p class="text-xs text-fg-tertiary italic">脂肪：炒菜油 + 蛋奶</p>
-        </div>
-
-        <div v-if="meal.tips" class="text-xs text-accent bg-accent-soft px-3 py-2 rounded-md mt-2">
-          {{ meal.tips }}
-        </div>
+      <!-- Tips -->
+      <div v-if="meal.tips" class="px-5 py-2 bg-accent/5 text-[10px] text-accent/80 font-medium border-t border-border-light">
+        {{ meal.tips }}
       </div>
     </div>
 
-    <!-- 食物选择弹窗 -->
-    <Teleport to="body">
-      <FoodPicker
-        v-if="showPicker"
-        :macro="pickerMacro"
-        @select="selectFood"
-        @close="showPicker = false"
-      />
-    </Teleport>
+    <!-- Food Picker -->
+    <FoodPicker
+      v-if="pickerState.open"
+      :macro="pickerState.macro"
+      @select="onFoodSelect"
+      @close="pickerState.open = false"
+    />
+    </div>
   </div>
 </template>
