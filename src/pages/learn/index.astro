@@ -1,13 +1,11 @@
 ---
 import AppShell from '../../layouts/AppShell.astro';
+import { getCollection } from 'astro:content';
 import { url } from '../../utils/url';
 
-const pages = [
-  { href: url('/learn/philosophy'), title: '为什么有效', desc: '四条核心理念：配额>卡路里、排除法>清单法、秤只用一周、脂肪不用算' },
-  { href: url('/learn/how-it-works'), title: '怎么运作', desc: '配额→食物两层模型，宏量素配额，每餐分配' },
-  { href: url('/learn/cutting'), title: '减脂须知', desc: '目标 BMI、速度、0.64 系数、有氧建议、调整方法' },
-  { href: url('/learn/bulking'), title: '增肌须知', desc: '目标 BMI、速度、0.84 系数、与减脂的系统性差异' },
-];
+const entries = (await getCollection('learn'))
+  .filter(e => !e.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <AppShell title="理解体系 — 松松健身" activeTab="learn">
@@ -17,11 +15,11 @@ const pages = [
     <p class="muted-text mb-8">先搞懂为什么，再看怎么做。</p>
 
     <div class="space-y-3">
-      {pages.map(({ href, title, desc }) => (
-        <a href={href} class="card flex items-start gap-4 block">
+      {entries.map(entry => (
+        <a href={url(`/learn/${entry.id}`)} class="card flex items-start gap-4 block">
           <div class="flex-1">
-            <div class="text-sm font-medium text-fg">{title}</div>
-            <div class="text-xs text-fg-tertiary mt-1">{desc}</div>
+            <div class="text-sm font-medium text-fg">{entry.data.title}</div>
+            <div class="text-xs text-fg-tertiary mt-1">{entry.data.description}</div>
           </div>
           <svg class="w-4 h-4 text-fg-tertiary mt-0.5 flex-none" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M6 4l4 4-4 4" />
