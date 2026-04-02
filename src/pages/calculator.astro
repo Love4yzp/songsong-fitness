@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import ProfileSetup from '../components/ProfileSetup.vue';
+---
+
+<Base title="计算器 — 松松健身">
+  <section class="container-tool py-10">
+    <h1 class="heading-2 mb-1">饮食计算器</h1>
+    <p class="muted-text mb-6">输入体重，选择场景，自动算出每天碳水/蛋白质/脂肪目标。</p>
+    <ProfileSetup client:load />
+  </section>
+</Base>

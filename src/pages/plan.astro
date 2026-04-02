@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import MealPlanner from '../components/MealPlanner.vue';
+---
+
+<Base title="饮食方案 — 松松健身">
+  <section class="container-wide py-10">
+    <h1 class="heading-2 mb-1">今日饮食方案</h1>
+    <p class="muted-text mb-6">根据你的计算结果，每餐吃什么、吃多少。点击食物可以换。</p>
+    <MealPlanner client:load />
+  </section>
+</Base>

@@ -10,8 +10,8 @@ interface Props {
 const { title, description, breadcrumb = [] } = Astro.props;
 ---
 
-<Base title={`${title} — 松松健身`} description={description}>
-  <article class="container py-10">
+<Base title={`${title} — 松松健身`} description={description} type="article">
+  <article class="max-w-[44rem] mx-auto px-6 py-10">
     {breadcrumb.length > 0 && (
       <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
         <a href="/" class="hover:text-fg-secondary">首页</a>
@@ -26,76 +26,238 @@ const { title, description, breadcrumb = [] } = Astro.props;
       </nav>
     )}
 
-    <h1 class="heading-1 mb-8">{title}</h1>
+    <h1 class="text-[1.75rem] md:text-[2rem] font-bold text-fg tracking-tight leading-[1.3] mb-8">{title}</h1>
 
-    <div class="prose-content">
+    <div class="prose-content" data-pangu>
       <slot />
     </div>
   </article>
 </Base>
 
 <style is:global>
+  /* ─── 中文排版基线 ─── */
+  .prose-content {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: theme('colors.fg.DEFAULT');
+    word-break: break-all;
+    overflow-wrap: break-word;
+    hanging-punctuation: first allow-end last;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  .dark .prose-content {
+    color: theme('colors.gray.100');
+  }
+
+  /* ─── 段落 ─── */
+  .prose-content p {
+    margin-bottom: 1.25em;
+    text-align: justify;
+    text-justify: inter-ideograph;
+  }
+
+  /* ─── 标题节奏 ─── */
   .prose-content h2 {
     font-size: 1.375rem;
-    font-weight: 600;
-    color: var(--un-color-fg, #37352f);
-    margin-top: 2.5rem;
+    font-weight: 700;
+    color: theme('colors.fg.DEFAULT');
+    margin-top: 2.75rem;
     margin-bottom: 0.75rem;
+    line-height: 1.35;
     letter-spacing: -0.01em;
   }
+
+  .dark .prose-content h2 {
+    color: theme('colors.gray.100');
+  }
+
   .prose-content h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--un-color-fg, #37352f);
-    margin-top: 1.75rem;
+    color: theme('colors.fg.DEFAULT');
+    margin-top: 2rem;
     margin-bottom: 0.5rem;
+    line-height: 1.4;
   }
-  .prose-content p {
-    color: #37352f;
-    line-height: 1.75;
-    margin-bottom: 1rem;
+
+  .dark .prose-content h3 {
+    color: theme('colors.gray.100');
   }
-  .prose-content ul, .prose-content ol {
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
+
+  /* 第一个 h2 不要顶部巨空 */
+  .prose-content > h2:first-child {
+    margin-top: 0;
   }
+
+  /* ─── 列表 ─── */
+  .prose-content ul,
+  .prose-content ol {
+    padding-left: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
   .prose-content li {
-    line-height: 1.75;
-    margin-bottom: 0.25rem;
+    line-height: 1.85;
+    margin-bottom: 0.35em;
   }
+
+  .prose-content li::marker {
+    color: theme('colors.fg.tertiary');
+  }
+
+  .dark .prose-content li::marker {
+    color: theme('colors.gray.500');
+  }
+
+  /* ─── 强调 ─── */
   .prose-content strong {
-    font-weight: 600;
+    font-weight: 700;
+    color: theme('colors.fg.DEFAULT');
   }
+
+  .dark .prose-content strong {
+    color: theme('colors.gray.100');
+  }
+
+  /* ─── 引用块 ─── */
   .prose-content blockquote {
-    border-left: 3px solid #e0e0de;
-    padding-left: 1rem;
-    color: #6b6b6b;
-    margin: 1rem 0;
+    border-left: 3px solid theme('colors.border.DEFAULT');
+    padding: 0.5em 0 0.5em 1em;
+    color: theme('colors.fg.secondary');
+    margin: 1.5em 0;
+    font-size: 1rem;
   }
+
+  .dark .prose-content blockquote {
+    border-left-color: theme('colors.gray.700');
+    color: theme('colors.gray.400');
+  }
+
+  .prose-content blockquote p {
+    margin-bottom: 0.5em;
+  }
+
+  .prose-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── 行内代码 ─── */
   .prose-content code {
-    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 0.875em;
-    background: #f7f7f5;
-    padding: 0.125rem 0.375rem;
+    font-family: theme('fontFamily.mono');
+    font-size: 0.85em;
+    background: theme('colors.bg.secondary');
+    padding: 0.15em 0.4em;
     border-radius: 3px;
+    /* 代码前后留微量空隙，避免和汉字粘连 */
+    margin-inline: 0.1em;
   }
+
+  .dark .prose-content code {
+    background: theme('colors.gray.800');
+  }
+
+  /* ─── 链接 ─── */
+  .prose-content a {
+    color: theme('colors.accent.DEFAULT');
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, theme('colors.accent.DEFAULT') 25%, transparent);
+    text-underline-offset: 0.15em;
+    transition: text-decoration-color 0.2s;
+  }
+
+  .prose-content a:hover {
+    text-decoration-color: theme('colors.accent.DEFAULT');
+  }
+
+  /* ─── 表格 ─── */
   .prose-content table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1rem 0;
+    margin: 1.5em 0;
     font-size: 0.9375rem;
+    line-height: 1.6;
   }
+
   .prose-content th {
     text-align: left;
     font-weight: 600;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 2px solid #e0e0de;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid theme('colors.border.DEFAULT');
+    white-space: nowrap;
   }
+
+  .dark .prose-content th {
+    border-bottom-color: theme('colors.gray.700');
+  }
+
   .prose-content td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid #f0f0ee;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid theme('colors.border.light');
+    vertical-align: top;
   }
+
+  .dark .prose-content td {
+    border-bottom-color: theme('colors.gray.800');
+  }
+
   .prose-content tr:hover td {
-    background: #f7f7f5;
+    background: theme('colors.bg.secondary');
+  }
+
+  .dark .prose-content tr:hover td {
+    background: theme('colors.gray.800');
+  }
+
+  /* ─── HR ─── */
+  .prose-content hr {
+    border: none;
+    border-top: 1px solid theme('colors.border.DEFAULT');
+    margin: 2.5em 0;
+  }
+
+  .dark .prose-content hr {
+    border-top-color: theme('colors.gray.700');
+  }
+
+  /* ─── Callout 内的段落不要额外底边距 ─── */
+  .prose-content .callout p,
+  .prose-content .callout-tip p,
+  .prose-content .callout-warn p,
+  .prose-content .callout-important p {
+    margin-bottom: 0;
+  }
+
+  /* ─── 盘古之白：CJK 与半角字符间的空隙 ─── */
+  .prose-content .pangu-space {
+    font-size: 0;
+    padding: 0 0.05em;
   }
 </style>
+
+<script>
+  import pangu from 'pangu';
+  
+  // 使用 requestIdleCallback 优化性能，避免阻塞主线程
+  function initPangu() {
+    const elements = document.querySelectorAll('[data-pangu]');
+    
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        elements.forEach(el => pangu.spacingNode(el));
+      }, { timeout: 2000 });
+    } else {
+      // 降级方案：使用 setTimeout
+      setTimeout(() => {
+        elements.forEach(el => pangu.spacingNode(el));
+      }, 0);
+    }
+  }
+  
+  // DOM ready 后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPangu);
+  } else {
+    initPangu();
+  }
+</script>

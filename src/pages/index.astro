@@ -9,14 +9,14 @@ import Base from '../layouts/Base.astro';
       管住嘴，<br />不用数卡路里。
     </h1>
     <p class="mt-4 text-lg text-fg-secondary max-w-xl leading-relaxed">
-      好人松松的饮食方法——用配额吃饭，而不是算热量。搞清楚碳水和蛋白质吃多少克，脂肪不用算。
+      好人松松的饮食方法——输入体重，选个场景，碳水蛋白质脂肪自动算好。每顿吃什么、吃多少克，一目了然。
     </p>
     <div class="mt-8 flex flex-wrap gap-3">
-      <a href="/learn/philosophy" class="inline-flex items-center gap-1.5 px-4 py-2 bg-fg text-white rounded-md text-sm font-medium hover:bg-fg/90 transition-colors">
-        开始了解
+      <a href="/calculator" class="btn-primary">
+        开始计算
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4" /></svg>
       </a>
-      <a href="/food" class="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 rounded-md text-sm text-fg-secondary hover:text-fg hover:border-gray-400 transition-colors">
+      <a href="/food" class="btn-secondary">
         查食物
       </a>
     </div>
@@ -53,44 +53,44 @@ import Base from '../layouts/Base.astro';
   <section class="container pb-16">
     <h2 class="heading-2 mb-6">这个网站有什么</h2>
     <div class="grid sm:grid-cols-2 gap-4">
-      <a href="/learn/philosophy" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">📖</span>
+      <a href="/calculator" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">&#9889;</span>
         <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">理解体系</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">为什么有效、怎么运作、减脂与增肌的区别</div>
+          <div class="text-sm font-medium text-fg group-hover:underline">饮食计算器</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">输入体重，选场景，自动算出每天碳水/蛋白质/脂肪目标</div>
+        </div>
+      </a>
+      <a href="/plan" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">&#128203;</span>
+        <div>
+          <div class="text-sm font-medium text-fg group-hover:underline">饮食方案</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">每餐吃什么、吃多少克，点击换食物</div>
         </div>
       </a>
       <a href="/food" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">🥦</span>
+        <span class="text-xl">&#129382;</span>
         <div>
           <div class="text-sm font-medium text-fg group-hover:underline">食物数据库</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">113 种食物的营养率，搜索、换算、排除清单</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">65+ 种食物的营养率，搜索、换算</div>
         </div>
       </a>
-      <a href="/training" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">🏋️</span>
+      <a href="/learn/philosophy" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
+        <span class="text-xl">&#128214;</span>
         <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">训练计划</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">三分化、四分化、居家方案、力量预测</div>
-        </div>
-      </a>
-      <a href="/qa" class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">💬</span>
-        <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">常见问题</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">体重不动、外面怎么吃、觉得饿……按症状找答案</div>
+          <div class="text-sm font-medium text-fg group-hover:underline">理解体系</div>
+          <div class="text-xs text-fg-tertiary mt-0.5">为什么有效、怎么运作、减脂与增肌的区别</div>
         </div>
       </a>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="bg-bg-secondary border-y border-gray-200/60">
+  <section class="bg-bg-secondary dark:bg-gray-800/50 border-y border-gray-200/60 dark:border-gray-700/60 transition-colors duration-200">
     <div class="container py-12 text-center">
       <p class="text-sm text-fg-secondary mb-1">内容来自</p>
-      <p class="font-semibold text-fg">B站@好人松松 的健身 Excel 超级套表</p>
+      <p class="font-semibold text-fg dark:text-gray-100">B站@好人松松 的健身 Excel 超级套表</p>
       <p class="text-sm text-fg-secondary mt-2">
-        配套视频：<a href="https://www.bilibili.com/video/BV1zu4m1N76R" target="_blank" class="underline decoration-dotted hover:text-fg">BV1zu4m1N76R</a>
+        配套视频：<a href="https://www.bilibili.com/video/BV1zu4m1N76R" target="_blank" class="underline decoration-dotted hover:text-fg dark:hover:text-gray-300">BV1zu4m1N76R</a>
       </p>
     </div>
   </section>

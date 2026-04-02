@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { foods, type Food } from '../data/foods';
+import { foods, type Food, type MacroType } from '../data/foods';
 
 const search = ref('');
-const activeTab = ref<'carb' | 'protein'>('carb');
+const activeTab = ref<MacroType>('carb');
 const macroNeed = ref<number>(60);
 
 const filtered = computed(() => {
   const q = search.value.toLowerCase().trim();
   return foods
-    .filter((f) => f.section === activeTab.value)
+    .filter((f) => f.macro === activeTab.value)
     .filter(
       (f) =>
         !q ||
@@ -66,7 +66,7 @@ const giColor: Record<string, string> = {
         v-model="search"
         type="text"
         placeholder="搜索食物名称、分类或备注…"
-        class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500 bg-white"
+        class="flex-1 input-field"
       />
       <div class="flex items-center gap-2 text-sm text-fg-secondary">
         <span>我需要</span>
@@ -105,7 +105,7 @@ const giColor: Record<string, string> = {
           <tbody>
             <tr
               v-for="food in items"
-              :key="food.name"
+              :key="food.id"
               class="border-t border-gray-100 hover:bg-bg-secondary/50 transition-colors"
             >
               <td class="px-3 py-2">
