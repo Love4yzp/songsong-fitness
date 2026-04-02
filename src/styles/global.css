@@ -56,6 +56,12 @@
   --c-scrollbar-hover: 156 163 175;
 
   /* ── Input interaction (Task 1 inserts below) ── */
+  /* Input: 状态切换（模拟 Excel 黄色可填报区域） */
+  --c-input-status:        255 249 219;   /* warm yellow */
+  --c-input-status-border: 255 236 153;
+  /* Input: 场景选择（模拟 Excel 蓝色可选区域） */
+  --c-input-scenario:        231 245 255;   /* light blue */
+  --c-input-scenario-border: 165 216 255;
 
   color-scheme: light;
 }
@@ -112,6 +118,12 @@
   --c-scrollbar-hover: 82 82 91;
 
   /* ── Input interaction (Task 1 inserts below) ── */
+  /* Input: 状态切换 */
+  --c-input-status:        45 42 30;
+  --c-input-status-border: 100 90 40;
+  /* Input: 场景选择 */
+  --c-input-scenario:        30 40 50;
+  --c-input-scenario-border: 40 70 100;
 
   color-scheme: dark;
 }

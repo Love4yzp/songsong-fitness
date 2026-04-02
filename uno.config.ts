@@ -60,6 +60,10 @@ export default defineConfig({
         snack: c('role-snack'),
       },
       // ── Input (Task 1 inserts below) ──
+      input: {
+        status: c('input-status'),
+        scenario: c('input-scenario'),
+      },
     },
     fontFamily: {
       sans: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
@@ -102,6 +106,10 @@ export default defineConfig({
     'input-field': 'w-full px-4 py-3 border border-border rounded-xl text-base bg-bg-secondary text-fg focus:outline-none focus:ring-1 focus:ring-accent transition-colors',
     'select-field': 'w-full px-4 py-3 border border-border rounded-xl text-base bg-bg-secondary text-fg focus:outline-none focus:ring-1 focus:ring-accent transition-colors appearance-none',
     'form-label': 'block text-sm font-medium text-fg-secondary mb-1.5',
+
+    // ── 控制台交互 ──
+    'console-status': 'bg-input-status border border-[rgb(var(--c-input-status-border))] rounded-lg px-3 py-2 cursor-pointer transition-colors',
+    'console-scenario': 'bg-input-scenario border border-[rgb(var(--c-input-scenario-border))] rounded-lg px-3 py-2 cursor-pointer transition-colors',
 
     // ── 数据展示 ──
     'stat-card': 'bg-bg-secondary rounded-2xl p-4 text-center',
