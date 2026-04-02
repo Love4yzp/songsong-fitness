@@ -1,98 +1,113 @@
 ---
-import Base from '../layouts/Base.astro';
+import AppShell from '../layouts/AppShell.astro';
 import { url } from '../utils/url';
+
+const learnPages = [
+  { href: url('/learn/philosophy'), title: '为什么有效', desc: '配额 > 卡路里、排除法 > 清单法' },
+  { href: url('/learn/how-it-works'), title: '怎么运作', desc: '配额→食物两层模型' },
+  { href: url('/learn/cutting'), title: '减脂须知', desc: '目标 BMI、速度、0.64 系数' },
+  { href: url('/learn/bulking'), title: '增肌须知', desc: '增速、0.84 系数、力训要求' },
+];
+
+const qaHighlights = [
+  { href: url('/qa/stall'), title: '体重不动了', tag: '最常见' },
+];
+
+const trainingPlans = [
+  { title: '健身房三分化', desc: '3天/周 · 新手推荐', href: url('/training') },
+  { title: '健身房四分化', desc: '4天/周 · 进阶', href: url('/training') },
+  { title: '居家三分化', desc: '弹力带/哑铃', href: url('/training') },
+];
 ---
 
-<Base title="松松健身 — 用配额吃饭，不算卡路里">
-  <!-- Hero -->
-  <section class="container py-16 md:py-24">
-    <h1 class="text-3xl md:text-5xl font-bold text-fg tracking-tight leading-tight max-w-2xl">
-      管住嘴，<br />不用数卡路里。
-    </h1>
-    <p class="mt-4 text-lg text-fg-secondary max-w-xl leading-relaxed">
-      好人松松的饮食方法——输入体重，选个场景，碳水蛋白质脂肪自动算好。每顿吃什么、吃多少克，一目了然。
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a href={url('/calculator')} class="btn-primary">
-        开始计算
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4" /></svg>
-      </a>
-      <a href={url('/food')} class="btn-secondary">
-        查食物
-      </a>
-    </div>
-  </section>
+<AppShell title="松松健身 — 用配额吃饭，不算卡路里" activeTab="home">
+  <div class="container py-6 px-4 space-y-10">
 
-  <!-- Three pillars -->
-  <section class="container pb-16">
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="card">
-        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念一</div>
-        <h3 class="heading-3 mb-2">只管碳水和蛋白质</h3>
-        <p class="text-sm text-fg-secondary leading-relaxed">
-          脂肪不用算。早饭吃蛋黄牛奶，正餐吃带油瘦肉炒菜，脂肪就够了。比数卡路里简单十倍。
-        </p>
-      </div>
-      <div class="card">
-        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念二</div>
-        <h3 class="heading-3 mb-2">记住不能吃什么</h3>
-        <p class="text-sm text-fg-secondary leading-relaxed">
-          不列"能吃"清单，只定义"不能吃"：高脂肉和糖油混合物。剩下的，随便吃。
-        </p>
-      </div>
-      <div class="card">
-        <div class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-3">理念三</div>
-        <h3 class="heading-3 mb-2">秤只用一周</h3>
-        <p class="text-sm text-fg-secondary leading-relaxed">
-          初期用食物秤建立直觉，之后就不用了。体重看两周趋势，不看每天。
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- What's here -->
-  <section class="container pb-16">
-    <h2 class="heading-2 mb-6">这个网站有什么</h2>
-    <div class="grid sm:grid-cols-2 gap-4">
-      <a href={url('/calculator')} class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">&#9889;</span>
-        <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">饮食计算器</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">输入体重，选场景，自动算出每天碳水/蛋白质/脂肪目标</div>
-        </div>
-      </a>
-      <a href={url('/plan')} class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">&#128203;</span>
-        <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">饮食方案</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">每餐吃什么、吃多少克，点击换食物</div>
-        </div>
-      </a>
-      <a href={url('/food')} class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">&#129382;</span>
-        <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">食物数据库</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">65+ 种食物的营养率，搜索、换算</div>
-        </div>
-      </a>
-      <a href={url('/learn/philosophy')} class="group flex gap-4 items-start p-4 rounded-lg hover:bg-bg-secondary transition-colors">
-        <span class="text-xl">&#128214;</span>
-        <div>
-          <div class="text-sm font-medium text-fg group-hover:underline">理解体系</div>
-          <div class="text-xs text-fg-tertiary mt-0.5">为什么有效、怎么运作、减脂与增肌的区别</div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="bg-bg-secondary dark:bg-gray-800/50 border-y border-gray-200/60 dark:border-gray-700/60 transition-colors duration-200">
-    <div class="container py-12 text-center">
-      <p class="text-sm text-fg-secondary mb-1">内容来自</p>
-      <p class="font-semibold text-fg dark:text-gray-100">B站@好人松松 的健身 Excel 超级套表</p>
-      <p class="text-sm text-fg-secondary mt-2">
-        配套视频：<a href="https://www.bilibili.com/video/BV1zu4m1N76R" target="_blank" class="underline decoration-dotted hover:text-fg dark:hover:text-gray-300">BV1zu4m1N76R</a>
+    <!-- Hero: 精简，一句话说清楚 -->
+    <section>
+      <h1 class="text-2xl md:text-4xl font-black text-fg-strong tracking-tight leading-tight mb-3">
+        管住嘴，不用数卡路里。
+      </h1>
+      <p class="text-sm text-fg-secondary max-w-md leading-relaxed mb-5">
+        基于 B站@好人松松 的健身方法论。输入体重、选个场景，每日三餐配额自动算好。
       </p>
-    </div>
-  </section>
-</Base>
+      <a href={url('/plan')} class="btn-primary inline-flex shadow-lg shadow-accent/20">
+        开始制定方案
+        <svg class="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <!-- 理解体系 -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs font-black text-fg-secondary uppercase tracking-wider">理解体系</h2>
+        <a href={url('/learn')} class="text-[10px] font-bold text-accent">查看全部</a>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        {learnPages.map(p => (
+          <a href={p.href} class="p-3 bg-bg-secondary rounded-xl border border-border-light hover:bg-bg-tertiary/50 transition-colors active:scale-[0.98]">
+            <div class="text-sm font-bold text-fg mb-0.5">{p.title}</div>
+            <div class="text-[10px] text-fg-tertiary leading-relaxed">{p.desc}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs font-black text-fg-secondary uppercase tracking-wider">常见问题</h2>
+        <a href={url('/qa')} class="text-[10px] font-bold text-accent">查看全部</a>
+      </div>
+      <div class="space-y-2">
+        {qaHighlights.map(q => (
+          <a href={q.href} class="flex items-center justify-between p-3 bg-bg-secondary rounded-xl border border-border-light hover:bg-bg-tertiary/50 transition-colors active:scale-[0.98]">
+            <span class="text-sm font-bold text-fg">{q.title}</span>
+            <span class="tag-pill bg-warning/10 text-warning font-bold">{q.tag}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 训练计划 -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs font-black text-fg-secondary uppercase tracking-wider">训练计划</h2>
+        <a href={url('/training')} class="text-[10px] font-bold text-accent">查看全部</a>
+      </div>
+      <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 snap-x">
+        {trainingPlans.map(t => (
+          <a href={t.href} class="flex-none w-40 p-3 bg-bg-secondary rounded-xl border border-border-light hover:bg-bg-tertiary/50 transition-colors snap-start active:scale-[0.98]">
+            <div class="text-sm font-bold text-fg mb-0.5">{t.title}</div>
+            <div class="text-[10px] text-fg-tertiary">{t.desc}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 食物数据库 -->
+    <section>
+      <a href={url('/food')} class="flex items-center gap-4 p-4 bg-bg-secondary rounded-2xl border border-border-light hover:bg-bg-tertiary/50 transition-colors active:scale-[0.98]">
+        <div class="w-10 h-10 bg-bg-tertiary rounded-xl flex items-center justify-center text-accent">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm font-bold text-fg">食物数据库</div>
+          <div class="text-[10px] text-fg-tertiary">113 种日常食物的营养率，输入克数自动计算</div>
+        </div>
+        <svg class="w-4 h-4 text-fg-tertiary flex-none" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 4l4 4-4 4" />
+        </svg>
+      </a>
+    </section>
+
+    <!-- 归属 -->
+    <footer class="text-center pt-4 pb-2">
+      <p class="text-[10px] text-fg-tertiary">
+        内容来源：B站 <a href="https://space.bilibili.com/2078781964" target="_blank" rel="noopener" class="text-accent font-bold">@好人松松</a>
+      </p>
+    </footer>
+  </div>
+</AppShell>

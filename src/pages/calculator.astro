@@ -1,12 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProfileSetup from '../components/ProfileSetup.vue';
+import { url } from '../utils/url';
 ---
 
-<Base title="计算器 — 松松健身">
-  <section class="container-tool py-10">
-    <h1 class="heading-2 mb-1">饮食计算器</h1>
-    <p class="muted-text mb-6">输入体重，选择场景，自动算出每天碳水/蛋白质/脂肪目标。</p>
-    <ProfileSetup client:load />
-  </section>
+<Base title="跳转中…" hideNav hideFooter>
+  <meta http-equiv="refresh" content={`0;url=${url('/plan')}`} slot="head" />
+  <div class="flex items-center justify-center min-h-screen text-fg-secondary text-sm">
+    正在跳转到方案页…
+  </div>
 </Base>
