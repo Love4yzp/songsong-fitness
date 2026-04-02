@@ -1,132 +1,120 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { foods, type Food, type MacroType } from '../data/foods';
+import { getFoodsByMacro, getFoodsByCategory, calcFoodWeight, type MacroType } from '../data/foods';
 
 const search = ref('');
-const activeTab = ref<MacroType>('carb');
-const macroNeed = ref<number>(60);
+const activeTab = ref<'carb' | 'protein'>('carb');
+const macroNeed = ref(50);
 
 const filtered = computed(() => {
-  const q = search.value.toLowerCase().trim();
-  return foods
-    .filter((f) => f.macro === activeTab.value)
-    .filter(
-      (f) =>
-        !q ||
-        f.name.toLowerCase().includes(q) ||
-        f.category.toLowerCase().includes(q) ||
-        (f.notes && f.notes.toLowerCase().includes(q)),
-    );
+  const allFoods = getFoodsByMacro(activeTab.value);
+  if (!search.value) return allFoods;
+  const q = search.value.toLowerCase();
+  return allFoods.filter(f =>
+    f.name.includes(q) || f.category.includes(q) || (f.notes || '').includes(q)
+  );
 });
 
 const grouped = computed(() => {
-  const map = new Map<string, Food[]>();
-  for (const f of filtered.value) {
-    const list = map.get(f.category) || [];
-    list.push(f);
-    map.set(f.category, list);
+  const groups = new Map<string, typeof filtered.value>();
+  for (const food of filtered.value) {
+    if (!groups.has(food.category)) groups.set(food.category, []);
+    groups.get(food.category)!.push(food);
   }
-  return map;
+  return groups;
 });
 
-function calcWeight(rate: number): string {
-  if (rate <= 0) return '—';
-  return Math.round(macroNeed.value / rate) + 'g';
-}
-
 const giColor: Record<string, string> = {
-  '高': 'bg-tag-red text-red-800',
-  '中': 'bg-tag-orange text-orange-800',
-  '低': 'bg-tag-green text-green-800',
+  '高': 'text-error bg-error/10',
+  '中': 'text-warning bg-warning/10',
+  '低': 'text-success bg-success/10',
 };
 </script>
 
 <template>
-  <div>
-    <!-- Tabs -->
-    <div class="flex gap-1 mb-5 border-b border-gray-200">
-      <button
-        v-for="tab in (['carb', 'protein'] as const)"
-        :key="tab"
-        :class="[
-          'px-3 py-2 text-sm transition-colors border-b-2 -mb-px',
-          activeTab === tab
-            ? 'border-fg text-fg font-medium'
-            : 'border-transparent text-fg-secondary hover:text-fg',
-        ]"
-        @click="activeTab = tab"
-      >
-        {{ tab === 'carb' ? '碳水食物' : '蛋白质食物' }}
-      </button>
-    </div>
-
-    <!-- Search + Calculator -->
-    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+  <div class="space-y-6">
+    <!-- Search + Controls -->
+    <div class="card space-y-4">
       <input
         v-model="search"
         type="text"
-        placeholder="搜索食物名称、分类或备注…"
-        class="flex-1 input-field"
+        placeholder="搜索食物名称或分类…"
+        class="input-field"
       />
-      <div class="flex items-center gap-2 text-sm text-fg-secondary">
-        <span>我需要</span>
-        <input
-          v-model.number="macroNeed"
-          type="number"
-          min="1"
-          max="500"
-          class="w-16 px-2 py-1.5 border border-gray-300 rounded text-sm text-center focus:outline-none focus:border-gray-500"
-        />
-        <span>g {{ activeTab === 'carb' ? '碳水' : '蛋白质' }}</span>
+      <div class="flex items-center justify-between gap-4 p-3 bg-bg-tertiary/50 rounded-xl">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-fg-secondary">我需要</span>
+          <input
+            v-model.number="macroNeed"
+            type="number" min="1" max="500"
+            class="w-16 px-2 py-1 bg-bg-tertiary border border-border rounded-lg text-sm text-center text-accent font-bold focus:outline-none focus:ring-1 focus:ring-accent"
+          />
+          <span class="text-sm font-bold text-fg-secondary">g {{ activeTab === 'carb' ? '碳水' : '蛋白质' }}</span>
+        </div>
+        <div class="toggle-group !flex-none">
+          <button
+            @click="activeTab = 'carb'"
+            :class="activeTab === 'carb' ? 'toggle-btn-active' : 'toggle-btn'"
+            class="!px-4 !py-1 text-xs"
+          >碳水</button>
+          <button
+            @click="activeTab = 'protein'"
+            :class="activeTab === 'protein' ? 'toggle-btn-active' : 'toggle-btn'"
+            class="!px-4 !py-1 text-xs"
+          >蛋白</button>
+        </div>
       </div>
     </div>
 
-    <!-- Table -->
+    <!-- Results -->
     <div v-if="filtered.length === 0" class="text-center py-12 text-fg-tertiary text-sm">
       没有找到匹配的食物
     </div>
 
-    <div v-for="[category, items] in grouped" :key="category" class="mb-6">
-      <h3 class="text-xs font-medium text-fg-tertiary uppercase tracking-wide mb-2">
+    <div v-for="[category, items] in grouped" :key="category" class="space-y-2">
+      <h3 class="text-sm font-black text-fg-strong ml-1 flex items-center gap-2">
         {{ category }}
+        <span class="text-[10px] font-bold text-fg-tertiary">{{ items.length }} 种</span>
       </h3>
-      <div class="border border-gray-200 rounded-lg overflow-hidden">
+      <div class="bg-bg-secondary rounded-2xl border border-border-light overflow-hidden">
         <table class="w-full text-sm">
           <thead>
-            <tr class="bg-bg-secondary text-left">
-              <th class="px-3 py-2 font-medium text-fg-secondary">食物</th>
-              <th class="px-3 py-2 font-medium text-fg-secondary w-20 text-right">营养率</th>
-              <th v-if="activeTab === 'carb'" class="px-3 py-2 font-medium text-fg-secondary w-14 text-center">GI</th>
-              <th class="px-3 py-2 font-medium text-fg-secondary w-24 text-right">
+            <tr class="bg-bg-tertiary/30 text-left border-b border-border">
+              <th class="px-4 py-3 font-bold text-fg-tertiary text-[10px] uppercase">食物</th>
+              <th class="px-4 py-3 font-bold text-fg-tertiary text-[10px] uppercase text-right w-16">营养率</th>
+              <th v-if="activeTab === 'carb'" class="px-4 py-3 font-bold text-fg-tertiary text-[10px] uppercase text-center w-14">GI</th>
+              <th class="px-4 py-3 font-bold text-fg-tertiary text-[10px] uppercase text-right w-24">
                 {{ macroNeed }}g → 吃
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="divide-y divide-border-light">
             <tr
               v-for="food in items"
               :key="food.id"
-              class="border-t border-gray-100 hover:bg-bg-secondary/50 transition-colors"
+              class="hover:bg-bg-tertiary/20 transition-colors"
             >
-              <td class="px-3 py-2">
-                <div>{{ food.name }}</div>
-                <div v-if="food.notes" class="text-xs text-fg-tertiary mt-0.5 leading-snug">
-                  {{ food.notes }}
-                </div>
+              <td class="px-4 py-3">
+                <div class="font-bold text-fg">{{ food.name }}</div>
+                <div v-if="food.notes" class="text-[10px] text-fg-tertiary mt-0.5 leading-snug">{{ food.notes }}</div>
               </td>
-              <td class="px-3 py-2 text-right font-mono text-xs">
-                {{ food.rate > 0 ? (food.rate * 100).toFixed(0) + '%' : '—' }}
-              </td>
-              <td v-if="activeTab === 'carb'" class="px-3 py-2 text-center">
-                <span
-                  v-if="food.gi"
-                  :class="['tag-pill text-xs', giColor[food.gi]]"
-                >
-                  {{ food.gi }}
+              <td class="px-4 py-3 text-right">
+                <span class="font-bold" :class="activeTab === 'carb' ? 'macro-carb' : 'macro-protein'">
+                  {{ (food.rate * 100).toFixed(0) }}%
                 </span>
               </td>
-              <td class="px-3 py-2 text-right font-mono text-sm font-medium">
-                {{ calcWeight(food.rate) }}
+              <td v-if="activeTab === 'carb'" class="px-4 py-3 text-center">
+                <span
+                  v-if="food.gi"
+                  :class="giColor[food.gi]"
+                  class="px-2 py-0.5 rounded text-[10px] font-bold"
+                >{{ food.gi }}</span>
+                <span v-else class="text-fg-tertiary text-[10px]">—</span>
+              </td>
+              <td class="px-4 py-3 text-right">
+                <span class="font-bold text-fg-strong font-mono">
+                  {{ food.rate > 0 ? calcFoodWeight(macroNeed, food.rate) + 'g' : '—' }}
+                </span>
               </td>
             </tr>
           </tbody>
