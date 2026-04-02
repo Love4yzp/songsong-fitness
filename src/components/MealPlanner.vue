@@ -249,20 +249,24 @@ const roleLabels: Record<string, string> = {
 
     <!-- ── 餐单列表 ── -->
     <div class="space-y-3">
-    <div v-for="(meal, index) in currentMeals" :key="index" class="rounded-xl border border-border-light overflow-hidden">
-      <!-- Meal header: compact single row -->
-      <div class="px-4 py-2 flex items-center justify-between bg-bg-tertiary/20">
-        <div class="flex items-center gap-2">
+    <div v-for="(meal, index) in currentMeals" :key="index" class="rounded-xl border border-border-light overflow-hidden"
+      :class="meal.role === 'post-workout' ? 'ring-1 ring-role-post/30' : ''"
+    >
+      <!-- Meal heading -->
+      <div class="px-4 py-3 flex items-center justify-between"
+        :class="meal.role === 'post-workout' ? 'bg-role-post/8' : meal.role === 'pre-workout' ? 'bg-role-pre/8' : 'bg-bg-tertiary/20'"
+      >
+        <div class="flex items-center gap-2.5">
+          <span class="text-base font-black text-fg-strong">{{ meal.name }}</span>
           <span
             :class="roleColors[meal.role]"
             class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border"
           >{{ roleLabels[meal.role] }}</span>
-          <span class="text-xs font-bold text-fg-strong">{{ meal.name }}</span>
         </div>
-        <div class="text-[10px] font-bold text-fg-tertiary font-mono">
-          <span class="text-macro-carb">C{{ meal.carbs }}</span>
-          <span class="mx-0.5">/</span>
-          <span class="text-macro-protein">P{{ meal.protein }}</span>
+        <div class="text-xs font-bold font-mono">
+          <span class="text-macro-carb">C{{ meal.carbs }}g</span>
+          <span class="mx-1 text-fg-tertiary">/</span>
+          <span class="text-macro-protein">P{{ meal.protein }}g</span>
         </div>
       </div>
 
