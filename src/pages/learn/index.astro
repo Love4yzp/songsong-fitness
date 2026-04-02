@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro';
+import AppShell from '../../layouts/AppShell.astro';
 import { url } from '../../utils/url';
 
 const pages = [
@@ -10,13 +10,8 @@ const pages = [
 ];
 ---
 
-<Base title="理解体系 — 松松健身">
-  <div class="container py-10">
-    <nav class="flex items-center gap-1.5 text-xs text-fg-tertiary mb-6">
-      <a href={url('/')} class="hover:text-fg-secondary">首页</a>
-      <span>/</span>
-      <span class="text-fg-secondary">理解体系</span>
-    </nav>
+<AppShell title="理解体系 — 松松健身" activeTab="learn">
+  <div class="container py-8 px-4">
 
     <h1 class="heading-1 mb-2">理解体系</h1>
     <p class="muted-text mb-8">先搞懂为什么，再看怎么做。</p>
@@ -35,4 +30,4 @@ const pages = [
       ))}
     </div>
   </div>
-</Base>
+</AppShell>
