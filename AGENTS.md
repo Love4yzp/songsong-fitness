@@ -6,7 +6,7 @@
 
 ## 项目概要
 
-好人松松健身知识内容网站，将 Excel 套表结构化为网页。
+好人松松健身方法论的结构化内容网站。
 
 - **技术栈**：Astro 6 + Vue 3 + UnoCSS + Nanostores + Bun
 - **内容系统**：Astro Content Collections（`src/content.config.ts`，glob loader + Zod）

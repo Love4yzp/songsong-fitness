@@ -2,7 +2,7 @@
 
 ## 项目定位
 
-好人松松健身知识的内容网站。把 Excel 套表里的知识体系释放为网页，便于搜索、阅读和分享。
+好人松松健身知识的内容网站。把好人松松的健身方法论结构化为网页，便于搜索、阅读和分享。
 
 - 仓库：https://github.com/Love4yzp/songsong-fitness
 - 在线：https://love4yzp.github.io/songsong-fitness/
@@ -64,10 +64,10 @@ Schema 定义在 `src/content.config.ts`，使用 `glob` loader + Zod。
 
 ## 内容来源
 
-所有内容基于好人松松健身 Excel 超级套表（30 Sheet）。
+所有内容基于好人松松的健身方法论体系。
 
 - B站主页：https://space.bilibili.com/2078781964
-- 套表网盘：https://pan.baidu.com/s/1iY73CTNleiiB0wGa0uh8jA?pwd=5s62
+- 原始资料：https://pan.baidu.com/s/1iY73CTNleiiB0wGa0uh8jA?pwd=5s62
 - 配套视频：https://www.bilibili.com/video/BV1zu4m1N76R
 
 ---
