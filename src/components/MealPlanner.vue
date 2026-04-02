@@ -7,6 +7,7 @@ import type { DayType } from '../logic/calculator';
 import { calculateBMR, calculateTDEE, calculateMacros } from '../logic/calculator';
 import { foods, getFoodsByMacro, calcFoodWeight, FOOD_IDS } from '../data/foods';
 import FoodPicker from './FoodPicker.vue';
+import TheoryBadge from './TheoryBadge.vue';
 
 const profile = useStore($profile);
 const isTrainingDay = useStore($isTrainingDay);
@@ -189,8 +190,8 @@ const roleLabels: Record<string, string> = {
         {{ meal.tips }}
       </div>
 
-      <!-- TODO: TheoryBadge slot — add after Gemini merge:
-        <TheoryBadge :role="meal.role" :goal="currentScenario.goal" /> -->
+      <!-- 松松理论金句 -->
+      <TheoryBadge :role="meal.role" :goal="currentScenario.goal" />
     </div>
 
     <!-- Food Picker -->
