@@ -130,52 +130,67 @@ const roleLabels: Record<string, string> = {
     </div>
 
     <!-- ── 餐单列表 ── -->
-    <div class="space-y-4">
-    <div v-for="(meal, index) in currentMeals" :key="index" class="card !p-0 overflow-hidden">
-      <!-- Meal header -->
-      <div class="px-5 py-3 flex items-center justify-between border-b border-border-light bg-bg-tertiary/20">
-        <div class="flex items-center gap-2.5">
+    <div class="space-y-3">
+    <div v-for="(meal, index) in currentMeals" :key="index" class="rounded-xl border border-border-light overflow-hidden">
+      <!-- Meal header: compact single row -->
+      <div class="px-4 py-2 flex items-center justify-between bg-bg-tertiary/20">
+        <div class="flex items-center gap-2">
           <span
             :class="roleColors[meal.role]"
-            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border"
+            class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border"
           >{{ roleLabels[meal.role] }}</span>
           <span class="text-xs font-bold text-fg-strong">{{ meal.name }}</span>
         </div>
-        <div class="text-[10px] font-bold text-fg-tertiary">
-          C {{ meal.carbs }}g / P {{ meal.protein }}g
+        <div class="text-[10px] font-bold text-fg-tertiary font-mono">
+          <span class="text-macro-carb">C{{ meal.carbs }}</span>
+          <span class="mx-0.5">/</span>
+          <span class="text-macro-protein">P{{ meal.protein }}</span>
         </div>
       </div>
 
-      <!-- Carb food -->
-      <div v-if="meal.carbs > 0" class="px-5 py-3 flex items-center justify-between border-b border-border-light">
-        <button class="flex items-center gap-2 group" @click="openPicker(index, 'carb')">
+      <!-- Carb food row + formula -->
+      <div v-if="meal.carbs > 0" class="px-4 py-2 flex items-center justify-between border-t border-border-light">
+        <button class="flex items-center gap-1.5 group" @click="openPicker(index, 'carb')">
           <span class="text-sm font-bold text-fg group-hover:text-accent transition-colors">
             {{ getCarbFood(index).name }}
           </span>
           <svg class="w-3 h-3 text-fg-tertiary" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5l3 3 3-3"/></svg>
         </button>
-        <span class="text-sm font-bold text-macro-carb font-mono">
-          {{ calcFoodWeight(meal.carbs, getCarbFood(index).rate) }}g
-        </span>
+        <div class="text-right">
+          <div class="text-sm font-black text-macro-carb font-mono">
+            {{ calcFoodWeight(meal.carbs, getCarbFood(index).rate) }}g
+          </div>
+          <div class="text-[9px] text-fg-tertiary font-mono">
+            {{ meal.carbs }}g &divide; {{ getCarbFood(index).rate }}
+          </div>
+        </div>
       </div>
 
-      <!-- Protein food -->
-      <div v-if="meal.protein > 0" class="px-5 py-3 flex items-center justify-between">
-        <button class="flex items-center gap-2 group" @click="openPicker(index, 'protein')">
+      <!-- Protein food row + formula -->
+      <div v-if="meal.protein > 0" class="px-4 py-2 flex items-center justify-between border-t border-border-light">
+        <button class="flex items-center gap-1.5 group" @click="openPicker(index, 'protein')">
           <span class="text-sm font-bold text-fg group-hover:text-accent transition-colors">
             {{ getProteinFood(index).name }}
           </span>
           <svg class="w-3 h-3 text-fg-tertiary" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5l3 3 3-3"/></svg>
         </button>
-        <span class="text-sm font-bold text-macro-protein font-mono">
-          {{ calcFoodWeight(meal.protein, getProteinFood(index).rate) }}g
-        </span>
+        <div class="text-right">
+          <div class="text-sm font-black text-macro-protein font-mono">
+            {{ calcFoodWeight(meal.protein, getProteinFood(index).rate) }}g
+          </div>
+          <div class="text-[9px] text-fg-tertiary font-mono">
+            {{ meal.protein }}g &divide; {{ getProteinFood(index).rate }}
+          </div>
+        </div>
       </div>
 
       <!-- Tips -->
-      <div v-if="meal.tips" class="px-5 py-2 bg-accent/5 text-[10px] text-accent/80 font-medium border-t border-border-light">
+      <div v-if="meal.tips" class="px-4 py-1.5 bg-accent/5 text-[10px] text-accent/80 font-medium border-t border-border-light">
         {{ meal.tips }}
       </div>
+
+      <!-- TODO: TheoryBadge slot — add after Gemini merge:
+        <TheoryBadge :role="meal.role" :goal="currentScenario.goal" /> -->
     </div>
 
     <!-- Food Picker -->
