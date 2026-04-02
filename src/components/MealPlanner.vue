@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from '@nanostores/vue';
-import { $profile, updateProfile, $isTrainingDay } from '../stores/profile';
+import { $profile, updateProfile, $isTrainingDay, $hasCompletedSetup } from '../stores/profile';
 import { scenarios } from '../data/scenarios';
 import type { DayType } from '../logic/calculator';
 import { calculateBMR, calculateTDEE, calculateMacros } from '../logic/calculator';
@@ -11,16 +11,33 @@ import TheoryBadge from './TheoryBadge.vue';
 
 const profile = useStore($profile);
 const isTrainingDay = useStore($isTrainingDay);
+const hasSetup = useStore($hasCompletedSetup);
+
+// ── 内联设置表单 ──
+const setupWeight = ref(70);
+const setupGender = ref<'male' | 'female'>('male');
+const setupAge = ref(28);
+const setupHeight = ref(170);
+const setupScenarioId = ref(3);
+
+const goalScenariosList = computed(() => ({
+  cutting: scenarios.filter(s => s.goal === 'cutting'),
+  bulking: scenarios.filter(s => s.goal === 'bulking'),
+}));
+
+function completeSetup() {
+  updateProfile({
+    weight: setupWeight.value,
+    gender: setupGender.value,
+    age: setupAge.value,
+    height: setupHeight.value,
+    scenarioId: setupScenarioId.value,
+  });
+}
 
 const currentScenario = computed(() =>
   scenarios.find(s => s.id === profile.value.scenarioId) || scenarios[0]
 );
-
-// ── 吸顶控制台数据 ──
-const goalScenarios = computed(() => ({
-  cutting: scenarios.filter(s => s.goal === 'cutting'),
-  bulking: scenarios.filter(s => s.goal === 'bulking'),
-}));
 
 const dayType = computed<DayType>(() => isTrainingDay.value ? 'training' : 'rest');
 
@@ -93,6 +110,63 @@ const roleLabels: Record<string, string> = {
 
 <template>
   <div>
+    <!-- ── 初始设置门槛 ── -->
+    <div v-if="!hasSetup" class="max-w-sm mx-auto py-8">
+      <h2 class="heading-2 mb-2 text-center">开始你的方案</h2>
+      <p class="text-xs text-fg-tertiary text-center mb-6">填入基本信息，系统按松松的配额公式自动拆解三餐。</p>
+
+      <div class="space-y-4">
+        <!-- 体重 -->
+        <div>
+          <label class="form-label">体重 (kg)</label>
+          <input
+            class="input-field !text-2xl !font-black !py-3"
+            type="number"
+            v-model.number="setupWeight"
+            min="30" max="200" step="0.1"
+          />
+        </div>
+
+        <!-- 性别/年龄/身高 -->
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="form-label">性别</label>
+            <select class="select-field" v-model="setupGender">
+              <option value="male">男</option>
+              <option value="female">女</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">年龄</label>
+            <input class="input-field" type="number" v-model.number="setupAge" min="10" max="80" />
+          </div>
+          <div>
+            <label class="form-label">身高 (cm)</label>
+            <input class="input-field" type="number" v-model.number="setupHeight" min="100" max="230" />
+          </div>
+        </div>
+
+        <!-- 场景 -->
+        <div>
+          <label class="form-label">目标场景</label>
+          <select class="select-field" v-model.number="setupScenarioId">
+            <optgroup label="减脂">
+              <option v-for="s in goalScenariosList.cutting" :key="s.id" :value="s.id">{{ s.timing }}</option>
+            </optgroup>
+            <optgroup label="增肌">
+              <option v-for="s in goalScenariosList.bulking" :key="s.id" :value="s.id">{{ s.timing }}</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <button class="btn-primary w-full" @click="completeSetup">
+          生成我的方案
+        </button>
+      </div>
+    </div>
+
+    <!-- ── 仪表盘（已完成设置） ── -->
+    <template v-else>
     <!-- ── 吸顶控制台 ── -->
     <div class="sticky top-0 z-40 bg-bg/95 backdrop-blur-sm border-b border-border -mx-4 px-4 pt-3 pb-2 mb-4">
       <div class="flex gap-2 items-stretch">
@@ -113,10 +187,10 @@ const roleLabels: Record<string, string> = {
           @change="updateProfile({ scenarioId: +($event.target as HTMLSelectElement).value })"
         >
           <optgroup label="减脂">
-            <option v-for="s in goalScenarios.cutting" :key="s.id" :value="s.id">{{ s.timing }}</option>
+            <option v-for="s in goalScenariosList.cutting" :key="s.id" :value="s.id">{{ s.timing }}</option>
           </optgroup>
           <optgroup label="增肌">
-            <option v-for="s in goalScenarios.bulking" :key="s.id" :value="s.id">{{ s.timing }}</option>
+            <option v-for="s in goalScenariosList.bulking" :key="s.id" :value="s.id">{{ s.timing }}</option>
           </optgroup>
         </select>
       </div>
@@ -202,5 +276,6 @@ const roleLabels: Record<string, string> = {
       @close="pickerState.open = false"
     />
     </div>
+    </template>
   </div>
 </template>

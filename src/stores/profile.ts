@@ -43,13 +43,14 @@ onMount($profile, () => {
       const parsed = JSON.parse(raw);
       // 验证数据完整性
       const restored = { ...defaultProfile(), ...parsed };
-      
+
       // 验证数值类型的有效性
       if (typeof restored.age === 'number' && restored.age >= 10 && restored.age <= 100 &&
           typeof restored.height === 'number' && restored.height >= 100 && restored.height <= 250 &&
           typeof restored.weight === 'number' && restored.weight >= 30 && restored.weight <= 300 &&
           typeof restored.scenarioId === 'number' && restored.scenarioId >= 1 && restored.scenarioId <= 15) {
         $profile.set(restored);
+        $hasCompletedSetup.set(true);
       }
     }
   } catch (e) {
@@ -75,7 +76,11 @@ onMount($profile, () => {
 
 export function updateProfile(patch: Partial<ProfileData>) {
   $profile.set({ ...$profile.get(), ...patch });
+  $hasCompletedSetup.set(true);
 }
+
+/** 用户是否已完成初始设置（localStorage 中存在 profile） */
+export const $hasCompletedSetup = atom<boolean>(false);
 
 /** 当前是否力训日 */
 export const $isTrainingDay = atom<boolean>(true);
