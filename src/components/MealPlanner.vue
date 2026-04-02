@@ -35,6 +35,22 @@ function completeSetup() {
   });
 }
 
+// ── 体重内联编辑 ──
+const editingWeight = ref(false);
+const tempWeight = ref(0);
+
+function startEditWeight() {
+  tempWeight.value = profile.value.weight;
+  editingWeight.value = true;
+}
+
+function saveWeight() {
+  if (tempWeight.value >= 30 && tempWeight.value <= 200) {
+    updateProfile({ weight: tempWeight.value });
+  }
+  editingWeight.value = false;
+}
+
 const currentScenario = computed(() =>
   scenarios.find(s => s.id === profile.value.scenarioId) || scenarios[0]
 );
@@ -170,6 +186,23 @@ const roleLabels: Record<string, string> = {
     <!-- ── 吸顶控制台 ── -->
     <div class="sticky top-0 z-40 bg-bg/95 backdrop-blur-sm border-b border-border -mx-4 px-4 pt-3 pb-2 mb-4">
       <div class="flex gap-2 items-stretch">
+        <!-- 体重编辑 -->
+        <div class="flex-none flex items-center rounded-lg px-2 py-1.5 bg-bg-secondary border border-border">
+          <template v-if="editingWeight">
+            <input
+              class="w-12 text-xs font-black text-fg bg-transparent text-center outline-none"
+              type="number" v-model.number="tempWeight" min="30" max="200" step="0.1"
+              @blur="saveWeight" @keydown.enter="saveWeight"
+            />
+            <span class="text-[9px] text-fg-tertiary">kg</span>
+          </template>
+          <template v-else>
+            <span class="text-xs font-black text-fg cursor-pointer" @click="startEditWeight">
+              {{ profile.weight }}kg
+            </span>
+          </template>
+        </div>
+
         <!-- 日类型切换 -->
         <div
           v-if="currentScenario.hasWeightTraining"
