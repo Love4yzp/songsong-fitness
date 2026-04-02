@@ -129,7 +129,7 @@ const roleLabels: Record<string, string> = {
     <!-- ── 初始设置门槛 ── -->
     <div v-if="!hasSetup" class="max-w-sm mx-auto py-8">
       <h2 class="heading-2 mb-2 text-center">开始你的方案</h2>
-      <p class="text-xs text-fg-tertiary text-center mb-6">填入基本信息，系统按松松的配额公式自动拆解三餐。</p>
+      <p class="text-xs text-fg-tertiary text-center mb-6">输入体重和目标，系统按体重配额自动拆解每日三餐的碳水和蛋白。</p>
 
       <div class="space-y-4">
         <!-- 体重 -->
