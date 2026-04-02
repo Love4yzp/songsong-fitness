@@ -74,6 +74,15 @@ const moreNav = [
           </a>
 
           <nav class="flex items-center gap-6">
+            <button
+              data-theme-toggle
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-fg-secondary hover:text-fg hover:bg-bg-tertiary transition-colors"
+              title="切换主题"
+              aria-label="切换亮色/暗色主题"
+            >
+              <svg class="w-4 h-4 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <svg class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </button>
             {primaryNav.map(({ href, label }) => (
               <a
                 href={href}
@@ -134,5 +143,18 @@ const moreNav = [
         </div>
       </footer>
     )}
+    <script is:inline>
+      // 主题切换 — 所有带 data-theme-toggle 的按钮共享逻辑
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-theme-toggle]');
+        if (!btn) return;
+        var html = document.documentElement;
+        var isDark = html.classList.contains('dark');
+        html.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', isDark ? '#ffffff' : '#18181b');
+      });
+    </script>
   </body>
 </html>
